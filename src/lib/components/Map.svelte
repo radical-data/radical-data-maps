@@ -20,7 +20,8 @@
 			style: tileStyle as StyleSpecification,
 			center: [initialState.lng, initialState.lat],
 			zoom: initialState.zoom,
-			attributionControl: false
+			attributionControl: false,
+			hash: true,
 		});
 	});
 
