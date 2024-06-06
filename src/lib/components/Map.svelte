@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import maplibregl, { type StyleSpecification } from 'maplibre-gl';
-	const { Map, addProtocol } = maplibregl;
+	const { Map, addProtocol, NavigationControl, GeolocateControl } = maplibregl;
 	import 'maplibre-gl/dist/maplibre-gl.css';
 	import { Protocol } from 'pmtiles';
 	import tileStyle from '$lib/tileStyle.json';
@@ -20,8 +20,20 @@
 			style: tileStyle as StyleSpecification,
 			center: [initialState.lng, initialState.lat],
 			zoom: initialState.zoom,
-			attributionControl: false
+			attributionControl: false,
+			hash: true
 		});
+
+		map.addControl(new NavigationControl({ showCompass: false }), 'bottom-right');
+		map.addControl(
+			new GeolocateControl({
+				positionOptions: {
+					enableHighAccuracy: true
+				},
+				trackUserLocation: true
+			}),
+			'bottom-right'
+		);
 	});
 
 	onDestroy(() => {
