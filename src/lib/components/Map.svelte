@@ -1,20 +1,26 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import pkg from 'maplibre-gl';
-	const { Map } = pkg;
+	import maplibregl, { type StyleSpecification } from 'maplibre-gl';
+	const { Map, addProtocol } = maplibregl;
 	import 'maplibre-gl/dist/maplibre-gl.css';
+	import { Protocol } from 'pmtiles';
+	import tileStyle from '$lib/tileStyle.json';
 
-	let map;
+	let map: typeof Map.prototype;
 	let mapContainer: HTMLDivElement;
+
+	let protocol = new Protocol();
+	addProtocol('pmtiles', protocol.tile);
 
 	onMount(() => {
 		const initialState = { lng: 0, lat: 0, zoom: 2 };
 
 		map = new Map({
 			container: mapContainer,
-			style: 'https://demotiles.maplibre.org/style.json',
+			style: tileStyle as StyleSpecification,
 			center: [initialState.lng, initialState.lat],
-			zoom: initialState.zoom
+			zoom: initialState.zoom,
+			attributionControl: false
 		});
 	});
 
